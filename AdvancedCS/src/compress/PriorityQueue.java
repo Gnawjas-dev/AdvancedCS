@@ -7,8 +7,7 @@ import java.util.TreeSet;
 
 public class PriorityQueue <E>{
 		
-	ArrayList <Node> priorityQueue;
-	TreeSet <Node> pq = new TreeSet<>(new setSort());
+	private ArrayList <Node> priorityQueue= new ArrayList<Node>();
 	
 	private class Node {
 		private E info;
@@ -25,20 +24,12 @@ public class PriorityQueue <E>{
 		
 	}
 	
-	public class setSort implements Comparator<Node> {
-
-		@Override
-		public int compare(Node one, Node two) {
-			// TODO Auto-generated method stub
-			if(one.getPrior()>two.getPrior())
-				return 1;
-			else if (one.getPrior()<two.getPrior())
-				return -1;
-			else
-				return 0;
-		}
-		
-		
+	public int getFirstPriority() {
+		return priorityQueue.get(0).getPrior();
+	}
+	
+	public E getFirst() {
+		return priorityQueue.get(0).info;
 	}
 	
 	public void add(E info, int priority) {
@@ -58,7 +49,7 @@ public class PriorityQueue <E>{
 	public String toString() {
 		String response="";
 		for(Node n : priorityQueue) {
-			response+="["+n.info.toString()+" "+String.valueOf(n.priority)+"] ";
+			response+="["+n.info.toString()+", "+n.priority+"] ";
 		}
 		return response;
 	}

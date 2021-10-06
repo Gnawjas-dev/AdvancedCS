@@ -9,8 +9,9 @@ import java.util.TreeMap;
 
 public class Compressor {
 	HashMap <Character, Integer> charFreq = new HashMap<>();
-	TreeMap <Integer, Character> freqChar;
-	
+	TreeMap <Integer, Character> tset;
+	HashMap <Character, String> codeMap = new HashMap<>();
+	PriorityQueue<Branch<Character>> pqueue;;
 	public Compressor() {
 		try {
 			read();
@@ -18,6 +19,11 @@ public class Compressor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		makeTree();
+		String code = "";
+		genCode(code, pqueue.getFirst());
+		System.out.println(codeMap);
 	}
 	
 	public void read() throws IOException {
@@ -42,18 +48,61 @@ public class Compressor {
 	            	
 	        System.out.print(character);
                 
-    
-            
         }
         
-        	freqChar = new TreeMap<>();
+        fr.close();
+        
+        System.out.println();
+        
+        	tset = new TreeMap<>();
         	
         	for(Character c : charFreq.keySet())
-        		freqChar.put(charFreq.get(c), c);
+        		tset.put(charFreq.get(c), c);
         	
 
-        	System.out.println(freqChar);
+        	System.out.println(tset);
         	
+	}
+	
+	public void makeTree() {
+		
+		pqueue = new PriorityQueue<Branch<Character>>();
+		
+		for(Character c : charFreq.keySet()) {
+			pqueue.add(new Branch<Character>(c), charFreq.get(c));
+		}
+		
+		System.out.println(pqueue.toString());
+		
+		while(pqueue.size()>1) {
+			
+			int a = pqueue.getFirstPriority();
+			Branch<Character> aa = pqueue.pop();
+			
+			int b = pqueue.getFirstPriority();
+			Branch<Character> bb = pqueue.pop();
+			
+			int combinedP = a+b;
+			
+			pqueue.add(new Branch<Character>(aa,bb), combinedP);
+		}
+		
+		System.out.println(pqueue);
+		
+		
+	}
+	
+	
+	public void genCode(String code, Branch<Character> current) {
+		if(current.isLeaf)
+			codeMap.put(current.info, code);
+		else {
+			//left
+			genCode(code+"0", current.left);
+			//right
+			genCode(code+"1", current.right);
+		}
+		
 	}
 	
 	//Priority Queue Class
