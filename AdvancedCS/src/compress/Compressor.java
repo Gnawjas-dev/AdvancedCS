@@ -1,17 +1,28 @@
 package compress;
 
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.TreeMap;
 
 public class Compressor {
 	HashMap <Character, Integer> charFreq = new HashMap<>();
 	TreeMap <Integer, Character> tset;
 	HashMap <Character, String> codeMap = new HashMap<>();
-	PriorityQueue<Branch<Character>> pqueue;;
+	PriorityQueue<Branch<Character>> pqueue; 
+	
+	File file = new File("WarAndPeace.txt");
+	FileReader fr;
+
+	
 	public Compressor() {
 		try {
 			read();
@@ -24,13 +35,18 @@ public class Compressor {
 		String code = "";
 		genCode(code, pqueue.getFirst());
 		System.out.println(codeMap);
+		
+		try {
+			encode();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void read() throws IOException {
-		
-		File file = new File("UncompressedFile");
 		 
-        FileReader fr = new FileReader(file);
+        fr = new FileReader(file);
         	
         int content;
             
@@ -51,6 +67,7 @@ public class Compressor {
         }
         
         fr.close();
+        
         
         System.out.println();
         
@@ -102,6 +119,51 @@ public class Compressor {
 			//right
 			genCode(code+"1", current.right);
 		}
+		
+	}
+	
+	public void encode() throws IOException {
+		
+		try {
+			
+			BufferedBitWriter bbw = new BufferedBitWriter("encodedTextFile");
+		
+			fr = new FileReader(file);
+	    	
+	        int content;
+	        String contentCode;
+	            
+	        while ((content = fr.read()) != -1) {
+	        	
+	        	contentCode = codeMap.get((char)content);
+	        	
+	        	for(Character c : contentCode.toCharArray()) {
+	        		if(c=='0')
+	        			bbw.writeBit(true);
+	        		else
+	        			bbw.writeBit(false);
+	        	}
+	                
+	        }
+	        
+	        fr.close();
+	        bbw.close();
+		
+		} catch(FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		}
+		
+		//Generate key-code file
+		
+		BufferedWriter bfw= new BufferedWriter(new FileWriter(new File("CodeKey")));
+		for(Character c : codeMap.keySet()) {
+			bfw.write(c);
+			bfw.newLine();
+			bfw.write(codeMap.get(c));
+			bfw.newLine();
+		}
+		
+		bfw.close();
 		
 	}
 	
