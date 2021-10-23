@@ -29,6 +29,7 @@ public class Compressor {
 			read();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("The file you searched doesn't exist");
 			e.printStackTrace();
 		}
 		
