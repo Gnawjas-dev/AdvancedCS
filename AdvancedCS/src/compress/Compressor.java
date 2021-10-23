@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.HashMap;
-
+import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Compressor {
@@ -19,8 +19,9 @@ public class Compressor {
 	HashMap <Character, String> codeMap = new HashMap<>();
 	PriorityQueue<Branch<Character>> pqueue; 
 	
-	File file = new File("WarAndPeace.txt");
+	File file;
 	FileReader fr;
+	
 
 	
 	public Compressor() {
@@ -45,8 +46,13 @@ public class Compressor {
 	}
 	
 	public void read() throws IOException {
-		 
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("please enter the name of the file you want to compress.");
+		String filename = sc.next();
+		file = new File(filename);
         fr = new FileReader(file);
+        sc.close();
         	
         int content;
             

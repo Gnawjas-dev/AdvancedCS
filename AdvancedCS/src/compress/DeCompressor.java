@@ -11,36 +11,65 @@ import java.util.HashMap;
 
 public class DeCompressor {
 	File file = new File("encodedTextFile");
+	File binaryfile = new File("BinaryFile");
+	
 	HashMap <String, String> codeKey = new HashMap<>();
 	
 	public DeCompressor() throws IOException{
 		readCodeKeys();
+		decodeWrite();
 	}
 	
 	public void decodeWrite() throws IOException {
-		FileReader fr = new FileReader(file);
-    	
-        int content;
-           
+		BufferedBitReader bbr = new BufferedBitReader("encodedTextFile");
         
-        while ((content = fr.read()) != -1) {
+		FileWriter fr = new FileWriter(new File("decompressed"));
+		String content = "";
+//		int temp;
+//		while((temp = br.read())!=-1) {
+//			content+=(char)temp;
+//			if(codeKey.containsKey(content)) {
+//				fr.write(codeKey.get(content));
+//				content="";
+//			}
+//		}
+        
+        while (bbr.hasNext()) {
+        	if(bbr.readBit())
+    			content+="0";
+    		else
+    			content+="1";
+        	for(String s : codeKey.keySet()) {
+        		if(content.equals(s)) {
+        			fr.write(codeKey.get(s));
+        			content="";
+        		}
+        	}
+        	
         	//use mr.friedman's file to convert to binary
         	//then make method to BufferedWriter War and Peace on new text file
         }
         
         fr.close();
+        bbr.close();
 	}
 	
 	public void readCodeKeys() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(new File("CodeKey")));
-		reader.readLine();
-		String line;
-		String secondLine;
+		FileReader reader = new FileReader(new File("CodeKey"));
+		int content;
+		String line = "";
+		String charac = "";
+		int code;
 		
-		while((line=reader.readLine())!=null) {
-			secondLine=reader.readLine();			
-			codeKey.put(line, secondLine);
-						//character, code
+		while((content=reader.read())!=-1) {
+			charac+= (char) content;
+			reader.read();
+			while((code = reader.read())!=-1 && (char)code!='\n') {
+				line+=(char)code;
+			}
+			codeKey.put(line, charac);
+			charac=""; line="";
+			
 		}
 		
 		System.out.println(codeKey);
