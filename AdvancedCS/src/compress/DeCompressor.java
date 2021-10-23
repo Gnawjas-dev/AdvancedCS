@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class DeCompressor {
+	
+	//only need the encoded Text file  + codekey to work
 	File file = new File("encodedTextFile");
-	File binaryfile = new File("BinaryFile");
+	
 	
 	HashMap <String, String> codeKey = new HashMap<>();
 	
 	public DeCompressor() throws IOException{
+		//same compressor constructor runner format
 		readCodeKeys();
 		decodeWrite();
 	}
@@ -25,6 +28,8 @@ public class DeCompressor {
         
 		FileWriter fr = new FileWriter(new File("decompressed"));
 		String content = "";
+		
+//		revised because errors occurred (somehow worked for 1 test case)		
 //		int temp;
 //		while((temp = br.read())!=-1) {
 //			content+=(char)temp;
@@ -34,8 +39,11 @@ public class DeCompressor {
 //			}
 //		}
         
+		
+//		use buffered bit reader and convert back into codes and immediately convert 
+//		from codemap to character to write into the decompressed file
         while (bbr.hasNext()) {
-        	if(bbr.readBit())
+        	if(bbr.readBit()) //depended on the true/false settings in the compressor (it's the same)
     			content+="0";
     		else
     			content+="1";
@@ -46,21 +54,27 @@ public class DeCompressor {
         		}
         	}
         	
+        	//self-written homework ignore please
         	//use mr.friedman's file to convert to binary
         	//then make method to BufferedWriter War and Peace on new text file
         }
         
+        //close everything like good kid I am
         fr.close();
         bbr.close();
 	}
 	
 	public void readCodeKeys() throws IOException {
+		//instantiating
 		FileReader reader = new FileReader(new File("CodeKey"));
 		int content;
 		String line = "";
 		String charac = "";
 		int code;
 		
+		//first read letter char, read again for next line
+		//then read char by char, build string until code finished (check for line-separator char and null)
+		//reverse codekey (compared to compressor's codekey, we need to build characters using the keyed codes)
 		while((content=reader.read())!=-1) {
 			charac+= (char) content;
 			reader.read();
@@ -72,7 +86,7 @@ public class DeCompressor {
 			
 		}
 		
-		System.out.println(codeKey);
+//		System.out.println(codeKey);
 	}
 	
 	public static void main(String[] args) throws IOException {
