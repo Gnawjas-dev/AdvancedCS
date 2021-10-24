@@ -47,9 +47,8 @@ public class DeCompressor {
     			content+="0";
     		else
     			content+="1";
-        	for(String s : codeKey.keySet()) {
-        		if(content.equals(s)) {
-        			fr.write(codeKey.get(s));
+        		if(codeKey.containsKey(content)) { //no for loop thanks to ivy! (good job ivy)
+        			fr.write(codeKey.get(content));
         			content="";
         		}
         	}
@@ -57,7 +56,6 @@ public class DeCompressor {
         	//self-written homework ignore please
         	//use mr.friedman's file to convert to binary
         	//then make method to BufferedWriter War and Peace on new text file
-        }
         
         //close everything like good kid I am
         fr.close();
@@ -95,3 +93,4 @@ public class DeCompressor {
 	}
 
 }
+
