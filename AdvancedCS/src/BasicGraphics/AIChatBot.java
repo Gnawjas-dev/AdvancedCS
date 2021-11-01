@@ -96,7 +96,21 @@ public class AIChatBot {
 
 	public void talk() {
 		// TODO Auto-generated method stub
-		text.append("Hi");
+		int random = (int)(Math.random()*6)+0;
+		
+		if(random==0)
+			text.append("What are you going to do this weekend?");
+		else if(random==1)
+			text.append("What are you going to eat today");
+		else if(random==2)
+			text.append("What is your favorite animal? I love crows! They are so omnious");
+		else if(random==3)
+			text.append("What is your favorite snack? I like french fries. ");
+		else if(random==4)
+			text.append("What class do you have next?");
+		else if(random==5)
+			text.append("Do we have lunch at A block or B block?");
+
 	}
 
 	public void update() {
