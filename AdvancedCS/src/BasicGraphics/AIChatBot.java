@@ -97,7 +97,7 @@ public class AIChatBot {
 
 	public void talk() {
 		// TODO Auto-generated method stub
-		int random = (int)(Math.random()*6)+0;
+		int random = (int)(Math.random()*5)+0;
 		if(random!=prevRan) {
 			prevRan=random;
 		} else {
