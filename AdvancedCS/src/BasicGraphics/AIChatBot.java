@@ -60,7 +60,7 @@ public class AIChatBot {
 				enter.setEditable(true);
 				enter.setVisible(true);
 	
-				jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	//			scroll.add(text);
 				
 				
