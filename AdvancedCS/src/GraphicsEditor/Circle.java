@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Circle extends Shape{
-
+	
 	public Circle(int x, int y, int w, int h, Color c) {
 		super(x, y, w, h, c);
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public Shape copy() {
 		// TODO Auto-generated method stub
-		return new Circle(x+50,y+50,width,height, c);
+		return new Circle(x,y,width,height, c);
 	}
 
 	@Override
@@ -32,13 +27,19 @@ public class Circle extends Shape{
 	public boolean isOn(int x, int y) {
 		// TODO Auto-generated method stub
 		//radius
-		//(int) Math.sqrt(Math.pow(endX-startX, 2)+Math.pow(endY-startY, 2));
+		//(int) Math.sqrt(Math.pow(endX-startX, 2)+Math.pow(endY-startY, 2)); for circle
+		//x^2/centerx + y^2/centery=1 for ellipses
+		//area when <= 1
 		int centerx = width/2+this.x;
-		int centery = width/2+this.y;
+		int centery = height/2+this.y;
+		double hradius =  Math.pow(height/2,2);
+		double wradius =  Math.pow(width/2,2);
+//		System.out.println(x + " " + centerx + " " + this.x + " " + wradius);
+		return((Math.pow(x-centerx, 2)/wradius)+(Math.pow(y-centery, 2)/hradius)<=1);
 		
-		int d = (int) Math.sqrt(Math.pow(x-centerx, 2)+Math.pow(y-centery, 2));
-		
-		return (width/2 >= d);
+//		int d = (int) Math.sqrt(Math.pow(x-centerx, 2)+Math.pow(y-centery, 2));
+//		
+//		return (width/2 >= d);
 	}
 
 	@Override

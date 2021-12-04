@@ -19,7 +19,7 @@ public class Line extends Shape{
 	@Override
 	public Shape copy() {
 		// TODO Auto-generated method stub
-		return new Line(x+50,y+50,width,height, c, linewidth);
+		return new Line(x,y,width,height, c, linewidth);
 	}
 
 	@Override
@@ -34,6 +34,11 @@ public class Line extends Shape{
 	@Override
 	public boolean isOn(int x, int y) {
 		// TODO Auto-generated method stub
+		//This solution was so extremely finnicky that I have decided to remove it, as such you can't move or delete lines (you can undo it though)
+//		if((width-this.x) != 0) 
+//			return(((height-this.y)/(width-this.x))*(this.x-x) > (this.y-y)+linewidth && ((height-this.y)/(width-this.x))*(this.x-x) < (this.y-y)-linewidth);
+//		else
+//			return(x > this.x - linewidth && this.x < this.x + linewidth && y < this.y + (height-this.y) && y >this.y);
 		return false;
 	}
 

@@ -20,7 +20,7 @@ public class Rectangle extends Shape{
 	@Override
 	public Shape copy() {
 		// TODO Auto-generated method stub
-		return new Rectangle(x+50,y+50,width,height,c);
+		return new Rectangle(x,y,width,height,c);
 	}
 
 	@Override

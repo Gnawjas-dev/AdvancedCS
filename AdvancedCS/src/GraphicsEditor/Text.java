@@ -24,7 +24,7 @@ public class Text extends Shape{
 	@Override
 	public Shape copy() {
 		// TODO Auto-generated method stub
-		return new Text(x+50, y+50, f, c, text);
+		return new Text(x, y, f, c, text);
 	}
 
 	@Override
