@@ -2,7 +2,7 @@ package Maze;
 
 import java.awt.Color;
 
-public class lefthandrule extends Bot{
+public class lefthandedjason extends Bot{
 	
 	//uses left hand rule
 	//doesnt work if there are patches of open box
@@ -10,7 +10,7 @@ public class lefthandrule extends Bot{
 	boolean one = true, two = false, three = false;
 	int step = 0;
 	
-	public lefthandrule(MazeRunner mr, Color c) {
+	public lefthandedjason(MazeRunner mr, Color c) {
 		super(mr, c);
 		// TODO Auto-generated constructor stub
 	}
@@ -38,14 +38,14 @@ public class lefthandrule extends Bot{
 				one=false;
 			}
 		}
-		if(two) {
+		else if(two) {
 			turnLeft();
 			two=false;
 			three=false;
 			one=true;
 		}
 		
-		if(three) {
+		else if(three) {
 			if(step!=3) {
 				turnLeft();
 				step++;
