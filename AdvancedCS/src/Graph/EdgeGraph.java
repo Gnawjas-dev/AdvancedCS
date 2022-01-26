@@ -2,28 +2,50 @@ package Graph;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-public class Graph <E> {
+
+
+public class EdgeGraph <E, T> {
+
+	private class Edge {
+		Vertex v1, v2;
+		T info;
+		private Edge (Vertex v1, Vertex v2, T info) {
+			this.v1=v1;
+			this.v2=v2;
+			this.info=info;
+		}
+		
+		public String toString() {
+			return "Connected to: " + v1.toString() + " and " + v2.toString() + " with a relationship of " + (String)info;
+		}
+		
+		private Vertex getOtherVertex(Vertex v) {
+			if(v.equals(v1)) return v2;
+			else if (v.equals(v2)) return v1;
+			else return null;
+		}
+	}
 	
 	private class Vertex{
 		
 		E info;
-		HashSet<Vertex> neighbors;
+		HashSet<Edge> neighbors;
 		private Vertex(E info) {
 			this.info=info;
-			 neighbors = new HashSet<Vertex>();
+			 neighbors = new HashSet<Edge>();
 		}
-		private void connect(Vertex v) {
-			neighbors.add(v);
+		private void connect(Edge e) {
+			neighbors.add(e);
 		}
 		private void remove(Vertex v) {
 			neighbors.remove(v);
@@ -36,7 +58,7 @@ public class Graph <E> {
 	
 	private HashMap<E, Vertex> graph;
 	
-	public Graph() {
+	public EdgeGraph() {
 		graph=new HashMap<E, Vertex>();
 	}
 	
@@ -53,30 +75,32 @@ public class Graph <E> {
 		String yes = "";
 		for(E info : graph.keySet()) {
 			yes+="[" + info + ": ";
-			for(Vertex v : getVertex(info).neighbors) {
-				yes+=v.info + ", ";
+			for(Edge e : getVertex(info).neighbors) {
+				yes+=e.toString() + ", ";
 			}
 			yes+="] ";
 		}
 		return yes;
 	}
 	
-	public E remove(E info) {
-		for(Vertex v : getVertex(info).neighbors) {
-			v.remove(getVertex(info));
-		}
-		graph.remove(info);
-		return info;
-		
-	}
+//	public E remove(E info) {
+//		for(Edge e : getVertex(info).neighbors) {
+//			e.remove(getVertex(info));
+//		}
+//		graph.remove(info);
+//		return info;
+//		
+//	}
 	
-	public void connect(E one, E two) {
+	public void connect(E one, E two, T info) {
 		
 		if(!contains(one)) add(one);
 		if(!contains(two)) add(two);
 		
-		getVertex(one).connect(getVertex(two));
-		getVertex(two).connect(getVertex(one));
+		Edge temp = new Edge(getVertex(one), getVertex(two), info); 
+		getVertex(one).connect(temp);
+		getVertex(two).connect(temp);
+		
 	}
 	
 	public boolean contains(E info) {
@@ -89,21 +113,10 @@ public class Graph <E> {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Graph <String> g = new Graph <String>();
-		
-		try {
-			g=read();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(g);
-		System.out.println(g.bfs("gregory", "tiffany"));
 		
 	}
 
-	public ArrayList<Vertex> bfs(E start, E target) {
+	public ArrayList<String> bfs(E start, E target) {
 		
 		HashMap<Vertex, Vertex> nextprev = new HashMap<>();
 		Vertex curr = getVertex(start);
@@ -112,20 +125,29 @@ public class Graph <E> {
 		toVisit.add(curr);
 		
 		while(toVisit.size()!=0) {			
+			
 			curr=toVisit.remove(0);
-			for(Vertex v : curr.neighbors) {
+			
+			for(Edge e : curr.neighbors) {
+				
+				Vertex v = e.getOtherVertex(curr);
 				
 				if(v.info.equals(target)) {
-					System.out.println("fill");
 					nextprev.put(v, curr);
-					return backtrace(nextprev, start, target);
+					ArrayList<Vertex> temp = backtrace(nextprev, start, target);
+					
+					ArrayList<String> actors = new ArrayList<>();
+					for(Vertex ve : temp) {
+						actors.add(ve.toString());
+					}
+					
+					return print(actors);
 					
 				}
 				
 				if(!nextprev.containsKey(v)) {
 					toVisit.add(v);
 					nextprev.put(v, curr);
-					
 				}
 				
 			}
@@ -136,6 +158,27 @@ public class Graph <E> {
 		
 	}
 	
+	
+	public ArrayList<String> print(ArrayList<String> actors) {
+		
+		ArrayList<String>ans = new ArrayList<>();
+		
+		for(int i=1; i<actors.size(); i++) {
+			String one = actors.get(i-1);
+			String two = actors.get(i);
+			String movie = "null";
+			for(Edge e : getVertex((E) one).neighbors) {
+				if(e.v1.equals(getVertex((E)one))&&e.v2.equals(getVertex((E)two))||e.v2.equals(getVertex((E)one))&&e.v1.equals(getVertex((E)two))) {
+					movie = e.toString();
+					ans.add(movie);
+					break;
+				}
+			}
+			
+		}
+		return ans;
+	}
+
 	public ArrayList<Vertex> backtrace(HashMap<Vertex, Vertex> nextprev, E start, E target) {
 		
 		ArrayList<Vertex> path = new ArrayList<>();
@@ -159,28 +202,14 @@ public class Graph <E> {
 		pw.println(graph.size());
 		for(E e : graph.keySet()) {
 			pw.println((String)e + " " + getVertex(e).neighbors.size());
-			for(Vertex v : getVertex(e).neighbors) {
-				pw.println((String)v.info);
+			for(Edge edge : getVertex(e).neighbors) {
+				pw.print(edge.getOtherVertex(getVertex(e)) + " ");
+				pw.println((String)edge.info);
 			}
 		}
 		pw.close();
 	}
 	
-	public static Graph<String> read() throws IOException {
-		
-		Graph<String>temp=new Graph<String>();
-		BufferedReader br=new BufferedReader(new FileReader("graph.txt"));
-		int graphsize = Integer.parseInt(br.readLine());
-		for(int i=0; i<graphsize; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			String name = st.nextToken();
-			temp.add(name);
-			int size = Integer.parseInt(st.nextToken());
-			
-			for(int j=0; j<size; j++) {
-				temp.connect(name, br.readLine());
-			}
-		}
-		return temp;
-	}
+
+
 }
