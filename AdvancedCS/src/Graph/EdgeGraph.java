@@ -241,7 +241,7 @@ public class EdgeGraph <E, T> {
 		pw.close();
 	}
 	
-	//without index this method loops the entire verticies and finds the vertex with the greatest amount of neighbors. 
+	//without index this method loops the entire vertices and finds the vertex with the greatest amount of neighbors. 
 	public String mostPopular() {
 		int max = -1;
 		String person = "";
